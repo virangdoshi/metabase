@@ -1,7 +1,6 @@
 (ns metabase.models.dashboard-test
   (:require [clojure.test :refer :all]
             [metabase.api.common :as api]
-            [metabase.api.dashboard-test :as api.dashboard-test]
             [metabase.automagic-dashboards.core :as magic]
             [metabase.models.card :refer [Card]]
             [metabase.models.collection :as collection :refer [Collection]]
@@ -294,9 +293,9 @@
 
 (deftest normalize-parameters-test
   (testing ":parameters should get normalized when coming out of the DB"
-    (api.dashboard-test/with-chain-filter-fixtures [{{dashboard-id :id} :dashboard}]
-      (is (= [{:name "Category Name", :slug "category_name", :id "_CATEGORY_NAME_", :type :category}
-              {:name "Category ID", :slug "category_id", :id "_CATEGORY_ID_", :type :category}
-              {:name "Price", :slug "price", :id "_PRICE_", :type :category}
-              {:name "ID", :slug "id", :id "_ID_", :type :category}]
+    (mt/with-temp Dashboard [{dashboard-id :id} {:parameters [{:name "Category Name"
+                                                               :slug "category_name"
+                                                               :id   "_CATEGORY_NAME_"
+                                                               :type "category"}]}]
+      (is (= [{:name "Category Name", :slug "category_name", :id "_CATEGORY_NAME_", :type :category}]
              (db/select-one-field :parameters Dashboard :id dashboard-id))))))
