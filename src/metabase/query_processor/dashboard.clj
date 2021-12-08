@@ -45,6 +45,15 @@
                                           (:mappings matching-param))
                                     (log/tracef "Parameter has no mapping for Card %d; skipping" card-id))]
       (log/tracef "Found matching mapping for Card %d:\n%s" card-id (u/pprint-to-str matching-mapping))
+      ;; if `request-param` specifies type, then validate that the type is allowed
+      (when (:type request-param)
+        (qp.card/check-allowed-parameter-value-type
+         param-id
+         (or (when (= (:type matching-param) :dimension)
+               (:widget-type matching-param))
+             (:type matching-param))
+         (:type request-param)))
+      ;; ok, now return the merged parameter info map.
       (merge
        {:type (:type matching-param)}
        request-param

@@ -218,11 +218,12 @@
                   (:type tag-def')        (update :type maybe-normalize-token)
                   (:widget-type tag-def') (update :widget-type maybe-normalize-token)))])))
 
-(defn- normalize-query-parameter [{:keys [type target], :as param}]
+(defn- normalize-query-parameter [{:keys [type widget-type target], :as param}]
   (cond-> param
     ;; some things that get ran thru here, like dashcard param targets, do not have :type
-    type   (update :type maybe-normalize-token)
-    target (update :target #(normalize-tokens % :ignore-path))))
+    type        (update :type maybe-normalize-token)
+    ;; widget-type (update :widget-type maybe-normalize-token)
+    target      (update :target #(normalize-tokens % :ignore-path))))
 
 (defn- normalize-source-query [source-query]
   (let [{native? :native, :as source-query} (m/map-keys maybe-normalize-token source-query)]
