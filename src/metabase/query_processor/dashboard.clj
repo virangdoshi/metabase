@@ -3,6 +3,7 @@
   (:require [clojure.tools.logging :as log]
             [medley.core :as m]
             [metabase.api.common :as api]
+            [metabase.mbql.normalize :as normalize]
             [metabase.models.dashboard :as dashboard :refer [Dashboard]]
             [metabase.models.dashboard-card :refer [DashboardCard]]
             [metabase.models.dashboard-card-series :refer [DashboardCardSeries]]
@@ -66,7 +67,8 @@
    request-params :- (s/maybe [{s/Keyword s/Any}])]
   (when (seq request-params)
     (log/tracef "Resolving Dashboard %d Card %d query request parameters" dashboard-id card-id)
-    (let [dashboard       (api/check-404 (db/select-one Dashboard :id dashboard-id))
+    (let [request-params  (normalize/normalize-fragment [:parameters] request-params)
+          dashboard       (api/check-404 (db/select-one Dashboard :id dashboard-id))
           param-id->param (dashboard/dashboard->resolved-params dashboard)]
       (log/tracef "Dashboard parameters:\n%s" (u/pprint-to-str param-id->param))
       (u/prog1
