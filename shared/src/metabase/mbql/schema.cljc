@@ -571,6 +571,20 @@
   "Schema for the definition of an arithmetic expression."
   (s/recursive #'ArithmeticExpression*))
 
+(def date+time+timezone-functions
+  "Date, time, and timezone related functions."
+  #{;; extraction functions (get some component of a given temporal value/column)
+    :get-year :get-quarter :get-month :get-day :get-weekday :get-hour :get-minute :get-second})
+
+(defclause ^{:requires-features #{:date-functions}} get-year
+  date StringExpressionArg)
+
+(def ^:private DateFunctionExpression*
+  (one-of get-year))
+
+(def ^:private DateFunctionExpression
+  "Schema for the definition of a date function expression."
+  (s/recursive #'DateFunctionExpression*))
 
 ;;; ----------------------------------------------------- Filter -----------------------------------------------------
 
@@ -733,10 +747,11 @@
   "Schema for anything that is accepted as a top-level expression definition, either an arithmetic expression such as a
   `:+` clause or a `:field` clause."
   (s/conditional
-   (partial is-clause? arithmetic-expressions) ArithmeticExpression
-   (partial is-clause? string-expressions)     StringExpression
-   (partial is-clause? :case)                  case
-   :else                                       Field))
+   (partial is-clause? arithmetic-expressions)       ArithmeticExpression
+   (partial is-clause? string-expressions)           StringExpression
+   (partial is-clause? date+time+timezone-functions) DateFunctionExpression
+   (partial is-clause? :case)                        case
+   :else                                             Field))
 
 
 ;;; -------------------------------------------------- Aggregations --------------------------------------------------

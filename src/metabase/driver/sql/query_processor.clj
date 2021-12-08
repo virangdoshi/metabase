@@ -638,6 +638,9 @@
                       (current-datetime-honeysql-form driver)
                       (add-interval-honeysql-form driver (current-datetime-honeysql-form driver) amount unit))))
 
+(defmethod ->honeysql [:sql :get-year]
+  [driver [_ arg]]
+  (hx/year (->honeysql driver arg)))
 
 ;;; +----------------------------------------------------------------------------------------------------------------+
 ;;; |                                            Field Aliases (AS Forms)                                            |
