@@ -85,7 +85,8 @@ export type SettingName =
   | "subscription-allowed-domains"
   | "cloud-gateway-ips"
   | "snowplow-enabled"
-  | "snowplow-url";
+  | "snowplow-url"
+  | "premium-embedding-token";
 
 type SettingsMap = Record<SettingName, any>; // provides access to Metabase application settings
 
@@ -191,6 +192,10 @@ class Settings {
     return this.get("snowplow-url");
   }
 
+  license() {
+    return this.get("premium-embedding-token");
+  }
+
   formattingOptions() {
     const opts = this.get("custom-formatting");
     return opts && opts["type/Temporal"] ? opts["type/Temporal"] : {};
@@ -244,6 +249,10 @@ class Settings {
 
   storeUrl(path = "") {
     return `https://store.metabase.com/${path}`;
+  }
+
+  pricingUrl() {
+    return `https://www.metabase.com/pricing/`;
   }
 
   newVersionAvailable() {

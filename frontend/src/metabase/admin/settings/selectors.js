@@ -3,6 +3,7 @@ import { createSelector } from "reselect";
 import MetabaseSettings from "metabase/lib/settings";
 import { t } from "ttag";
 import CustomGeoJSONWidget from "./components/widgets/CustomGeoJSONWidget";
+import { SettingsLicense } from "./components/SettingsLicense/SettingsLicense";
 import SiteUrlWidget from "./components/widgets/SiteUrlWidget";
 import HttpsOnlyWidget from "./components/widgets/HttpsOnlyWidget";
 import {
@@ -45,6 +46,10 @@ function updateSectionsWithPlugins(sections) {
     return sections;
   }
 }
+
+const getLicenseMenuLabel = () => {
+  return t`License`;
+};
 
 const SECTIONS = updateSectionsWithPlugins({
   setup: {
@@ -397,6 +402,12 @@ const SECTIONS = updateSectionsWithPlugins({
         allowValueCollection: true,
       },
     ],
+  },
+  license: {
+    name: getLicenseMenuLabel(),
+    order: 12,
+    component: SettingsLicense,
+    settings: [],
   },
 });
 

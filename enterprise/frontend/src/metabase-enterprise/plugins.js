@@ -15,7 +15,6 @@ import "./caching";
 import "./collections";
 import "./whitelabel";
 import "./embedding";
-import "./store";
 import "./snippets";
 import "./sharing";
 import "./moderation";

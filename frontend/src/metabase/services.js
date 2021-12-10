@@ -366,6 +366,10 @@ export const SettingsApi = {
   // delete:                   DELETE("/api/setting/:key"),
 };
 
+export const StoreApi = {
+  tokenStatus: GET("/api/premium-features/token/status"),
+};
+
 export const PermissionsApi = {
   groups: GET("/api/permissions/group"),
   groupDetails: GET("/api/permissions/group/:id"),
